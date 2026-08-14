@@ -18,9 +18,11 @@ jobs:
       - name: Build
         run: cargo build
 
-      - name: Run in QEMU
+           - name: Run in QEMU
         run: |
-          echo "help" | timeout 5s qemu-system-arm \
+          (printf 'help\r\n'; sleep 2) | timeout 5s qemu-system-arm \
             -M lm3s6965evb \
             -kernel target/thumbv7m-none-eabi/debug/lumen-os \
-            -nographic || true
+            -display none \
+            -serial stdio \
+            -monitor none || true
