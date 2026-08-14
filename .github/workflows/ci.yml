@@ -1,0 +1,22 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: thumbv7m-none-eabi
+
+      - name: Install QEMU
+        run: sudo apt-get update && sudo apt-get install -y qemu-system-arm
+
+      - name: Build
+        run: cargo build
+
+      - name: Run in QEMU
+        run: timeout 5s qemu-system-arm -M lm3s6965evb -kernel target/thumbv7m-none-eabi/debug/lumen-os -nographic -semihosting || true
