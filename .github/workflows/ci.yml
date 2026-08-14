@@ -19,4 +19,8 @@ jobs:
         run: cargo build
 
       - name: Run in QEMU
-        run: timeout 5s qemu-system-arm -M lm3s6965evb -kernel target/thumbv7m-none-eabi/debug/lumen-os -nographic -semihosting || true
+        run: |
+          echo "help" | timeout 5s qemu-system-arm \
+            -M lm3s6965evb \
+            -kernel target/thumbv7m-none-eabi/debug/lumen-os \
+            -nographic || true
